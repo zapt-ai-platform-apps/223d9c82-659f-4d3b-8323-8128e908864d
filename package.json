@@ -2,7 +2,6 @@
   "name": "joke-app",
   "version": "1.0.0",
   "description": "A Joke app with SolidJS, Tailwind, and Vite",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "npm run generate && npm run migrate && vite build",
