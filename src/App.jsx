@@ -14,7 +14,7 @@ function App() {
   const [apiResponse, setApiResponse] = createSignal(null);
   const [jokes, setJokes] = createSignal([]);
   const [newJoke, setNewJoke] = createSignal({ setup: '', punchline: '' });
- 
+
   const checkUserSignedIn = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
