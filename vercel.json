@@ -1,4 +1,18 @@
 {
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/api/$1"
+        },
+        {
+            "src": "^/assets/(.*)",
+            "dest": "/assets/$1"
+        },
+        {
+            "src": "^/(?!api).*",
+            "dest": "/index.html"
+        }
+    ],
     "builds": [
         {
             "src": "package.json",
@@ -9,16 +23,6 @@
                     "drizzle/**"
                 ]
             }
-        }
-    ],
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "/api/$1"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/dist/$1"
         }
     ]
 }
