@@ -7,7 +7,7 @@ const fetchMessage = async () => {
 
 function App() {
   const [count, setCount] = createSignal(0);
-  const [message, { refetch }] = createResource(fetchMessage);
+  const [serverData, { refetch }] = createResource(fetchMessage);
 
   return (
     <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -23,12 +23,17 @@ function App() {
         class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 mb-4"
         onClick={() => refetch()}
       >
-        Fetch Server Message
+        Fetch Server Data
       </button>
       <div class="mt-4">
-        {message.loading && <p>Loading...</p>}
-        {message.error && <p>Error: {message.error.message}</p>}
-        {message() && <p>Server says: {message().message}</p>}
+        {serverData.loading && <p>Loading...</p>}
+        {serverData.error && <p>Error: {serverData.error.message}</p>}
+        {serverData() && (
+          <div>
+            <p>Server says: {serverData().message}</p>
+            <p>Current time: {serverData().currentTime}</p>
+          </div>
+        )}
       </div>
     </div>
   );
