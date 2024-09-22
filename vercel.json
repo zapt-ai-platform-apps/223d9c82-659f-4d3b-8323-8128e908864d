@@ -1,21 +1,24 @@
 {
+    "builds": [
+        {
+            "src": "package.json",
+            "use": "@vercel/node",
+            "config": {
+                "includeFiles": [
+                    "dist/**",
+                    "drizzle/**"
+                ]
+            }
+        }
+    ],
     "routes": [
         {
             "src": "/api/(.*)",
             "dest": "/api/$1"
         },
         {
-            "src": "^/assets/(.*)",
-            "dest": "/assets/$1"
-        },
-        {
-            "src": "^/(?!api).*",
-            "dest": "/index.html"
+            "src": "/(.*)",
+            "dest": "/dist/$1"
         }
-    ],
-    "functions": {
-        "api/*.js": {
-            "includeFiles": "../drizzle/**"
-        }
-    }
+    ]
 }
