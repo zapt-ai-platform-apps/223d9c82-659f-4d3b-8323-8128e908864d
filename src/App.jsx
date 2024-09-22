@@ -1,4 +1,4 @@
-import { createSignal, createResource } from 'solid-js';
+import { createSignal, createResource, onMount } from 'solid-js';
 
 const fetchMessage = async () => {
   const response = await fetch('/api/hello');
@@ -8,6 +8,21 @@ const fetchMessage = async () => {
 function App() {
   const [count, setCount] = createSignal(0);
   const [serverData, { refetch }] = createResource(fetchMessage);
+
+  const fetchJokes = async () => {
+    try {
+      const response = await fetch('/api/getJokes');
+      const data = await response.json();
+      console.log(data)
+      setJokes(data);
+    } catch (error) {
+      console.error('Error fetching jokes:', error);
+    }
+  };
+
+  onMount(() => {
+    fetchJokes();
+  });
 
   return (
     <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">

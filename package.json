@@ -4,12 +4,17 @@
   "description": "SolidJS app with Vite, Tailwind, and Vercel serverless function",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview"
+    "build": "npm run generate && npm run migrate && vite build",
+    "serve": "vite preview",
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "solid-js": "^1.7.0",
-    "date-fns": "^2.30.0"
+    "date-fns": "^2.30.0",
+    "drizzle-orm": "^0.33.0",
+    "drizzle-kit": "^0.24.2",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
