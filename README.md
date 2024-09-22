@@ -1,6 +1,6 @@
 # Joke App
 
-Welcome to the Joke App! This application allows users to view, create, and fetch jokes using a user-friendly interface.
+This application allows users to view, create, and fetch jokes using a user-friendly interface.
 
 ## User Journeys
 
