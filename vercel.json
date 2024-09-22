@@ -13,16 +13,9 @@
             "dest": "/index.html"
         }
     ],
-    "builds": [
-        {
-            "src": "package.json",
-            "use": "@vercel/node",
-            "config": {
-                "includeFiles": [
-                    "dist/**",
-                    "drizzle/**"
-                ]
-            }
+    "functions": {
+        "api/*.js": {
+            "includeFiles": "../drizzle/**"
         }
-    ]
+    }
 }
