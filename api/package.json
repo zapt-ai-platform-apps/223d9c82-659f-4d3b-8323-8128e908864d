@@ -1,6 +1,0 @@
-{
-    "dependencies": {
-      "drizzle-orm": "^0.x.x",
-      "pg": "^8.x.x"
-    }
-  }
