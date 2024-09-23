@@ -1,6 +1,7 @@
 import { jokes } from '../drizzle/schema.js';
 import { Pool } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
+import { authenticateUser } from "./_apiUtils.js"
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
