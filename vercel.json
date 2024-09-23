@@ -10,7 +10,7 @@
     }
   ],
   "functions": {
-    "api/*.mjs": {
+    "api/*.js": {
       "includeFiles": "../drizzle/**"
     }
   }
