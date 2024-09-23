@@ -1,13 +1,6 @@
-import { createSignal, createResource, onMount, For } from 'solid-js';
-
-const fetchMessage = async () => {
-  const response = await fetch('/api/hello');
-  return response.json();
-};
+import { createSignal, onMount, For } from 'solid-js';
 
 function App() {
-  const [count, setCount] = createSignal(0);
-  const [serverData, { refetch }] = createResource(fetchMessage);
   const [jokes, setJokes] = createSignal([]);
   const [newJoke, setNewJoke] = createSignal({ setup: '', punchline: '' });
 
@@ -49,30 +42,6 @@ function App() {
   return (
     <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 class="text-4xl font-bold mb-4">SolidJS + Vite + Tailwind</h1>
-      <p class="mb-4">Count: {count()}</p>
-      <button
-        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mb-4"
-        onClick={() => setCount(count() + 1)}
-      >
-        Increment
-      </button>
-      <button
-        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 mb-4"
-        onClick={() => refetch()}
-      >
-        Fetch Server Data
-      </button>
-      <div class="mt-4 mb-8">
-        {serverData.loading && <p>Loading...</p>}
-        {serverData.error && <p>Error: {serverData.error.message}</p>}
-        {serverData() && (
-          <div>
-            <p>Server says: {serverData().message}</p>
-            <p>Current time: {serverData().currentTime}</p>
-          </div>
-        )}
-      </div>
-
       <h2 class="text-2xl font-bold mb-4">Jokes</h2>
       <For each={jokes()}>
         {(joke) => (
