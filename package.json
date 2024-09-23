@@ -8,22 +8,22 @@
     "build": "npm run generate && npm run migrate && vite build",
     "serve": "vite preview",
     "generate": "drizzle-kit generate",
-    "migrate": "drizzle-kit migrate"
+    "migrate": "drizzle-kit migrate --verbose"
   },
   "dependencies": {
-    "solid-js": "^1.7.0",
+    "solid-js": "^1.8.22",
     "drizzle-orm": "^0.33.0",
     "drizzle-kit": "^0.24.2",
-    "pg": "^8.11.3",
+    "pg": "^8.13.0",
     "@supabase/auth-ui-shared": "^0.1.8",
-    "@supabase/auth-ui-solid": "^0.3.2",
-    "@supabase/supabase-js": "^2.10.0"
+    "@supabase/auth-ui-solid": "^0.3.8",
+    "@supabase/supabase-js": "^2.45.4"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.2",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0"
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "vite": "^5.4.7",
+    "vite-plugin-solid": "^2.10.2"
   }
 }
