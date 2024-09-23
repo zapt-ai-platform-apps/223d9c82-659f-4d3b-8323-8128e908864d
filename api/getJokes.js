@@ -1,14 +1,16 @@
-import { drizzle } from 'drizzle-orm/vercel-postgres';
-import { Pool } from 'pg';
 import { jokes } from '../drizzle/schema.js';
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Client } from "pg";
 
-const pool = new Pool({
+const client = new Client({
   connectionString: process.env.COCKROACH_DB_URL,
 });
 
-const db = drizzle(pool);
-
 export default async function handler(req, res) {
+
+  await client.connect();
+  const db = drizzle(client);
+
   if (req.method === 'GET') {
     try {
       const result = await db.select().from(jokes).limit(10);
