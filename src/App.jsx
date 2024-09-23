@@ -29,16 +29,13 @@ function App() {
 
   const fetchJokes = async () => {
     const { data: { session } } = await supabase.auth.getSession()
-console.log('hi')
     const response = await fetch('/api/getJokes', {
       headers: {
         'Authorization': `Bearer ${session.access_token}`
       }
     });
-console.log('bye')
     if (response.ok) {
       const data = await response.json();
-console.log(data)
       setJokes(data);
     } else {
       console.error('Error fetching jokes:', error);
@@ -70,6 +67,7 @@ console.log(data)
   };
 
   onMount(() => {
+    if(!user()) return;
     fetchJokes();
   });
 

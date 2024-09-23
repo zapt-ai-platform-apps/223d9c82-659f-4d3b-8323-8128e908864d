@@ -2,6 +2,7 @@ import { jokes } from '../drizzle/schema.js';
 import { authenticateUser } from "./_apiUtils.js"
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
+import { eq } from 'drizzle-orm';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
 
     const result = await db.select()
       .from(jokes)
-      .where(jokes.userId.eq(user.id))
+      .where(eq(jokes.userId, user.id))
       .limit(10);
 
     res.status(200).json(result);
