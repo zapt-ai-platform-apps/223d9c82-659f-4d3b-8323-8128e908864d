@@ -7,5 +7,10 @@ export default defineConfig({
     target: 'esnext',
     polyfillDynamicImport: false,
   },
-
+  resolve: {
+    conditions: ['development', 'browser'],
+  },
+  optimizeDeps: {
+    exclude: ['drizzle-orm', 'pg'] // Add any server-only dependencies here
+  }
 });
