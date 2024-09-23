@@ -1,5 +1,9 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import { Client } from "pg";
+// import { Client } from "pg";
+
+import pg from 'pg';
+const { Client } = pg;
+
 import { jokes } from '../drizzle/schema.js';
 
 const client = new Client({
