@@ -10,11 +10,8 @@
     }
   ],
   "functions": {
-    "api/*.js": {
-      "includeFiles": [
-        "../drizzle/**",
-        "../node_modules/drizzle-orm/**"
-      ]
+    "api/*.mjs": {
+      "includeFiles": "../drizzle/**"
     }
   }
 }
