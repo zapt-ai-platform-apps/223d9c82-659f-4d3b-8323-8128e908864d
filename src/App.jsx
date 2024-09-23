@@ -3,12 +3,10 @@ import { createEvent, supabase } from './supabaseClient'
 import { Auth } from '@supabase/auth-ui-solid'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 
-// add supabase service role key
-
 function App() {
   const [jokes, setJokes] = createSignal([]);
   const [newJoke, setNewJoke] = createSignal({ setup: '', punchline: '' });
-
+  const [user, setUser] = createSignal(null)
   const [currentPage, setCurrentPage] = createSignal('login')
 
   const checkUserSignedIn = async () => {
