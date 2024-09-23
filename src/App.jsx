@@ -53,6 +53,7 @@ function App() {
       const response = await fetch('/api/saveJoke', {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${session.access_token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newJoke()),
