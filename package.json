@@ -5,11 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run generate && npm run log-migrations-post && npm run migrate && vite build",
-    "serve": "vite preview",
-    "generate": "drizzle-kit generate",
-    "migrate": "node detailed-migrate.js",
-    "log-migrations-post": "echo 'After generate:' && ls -la ./drizzle"
+    "build": "drizzle-kit push && vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
     "solid-js": "^1.8.22",
