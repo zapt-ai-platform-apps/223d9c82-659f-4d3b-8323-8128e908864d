@@ -73,7 +73,7 @@ console.log(data)
   };
 
   onMount(() => {
-    if(!user()) return
+    // if(!user()) return
     fetchJokes();
   });
 
