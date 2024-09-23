@@ -1,19 +1,15 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-// import { Client } from "pg";
-
 import pg from 'pg';
 const { Client } = pg;
-
 import { jokes } from '../drizzle/schema.js';
 
 const client = new Client({
   connectionString: process.env.COCKROACH_DB_URL,
 });
 
-export default async function handler(req, res) {
+const db = drizzle(client);
 
-  await client.connect();
-  const db = drizzle(client);
+export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
