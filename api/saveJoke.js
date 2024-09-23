@@ -1,4 +1,4 @@
-import { authenticateUser, getDatabaseClient, getDrizzle } from './_apiUtils';
+import { authenticateUser, getDatabaseClient, getDrizzle } from './_apiUtils.js';
 import { jokes } from '../drizzle/schema.js';
 
 export default async function handler(req, res) {
