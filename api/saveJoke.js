@@ -1,4 +1,4 @@
-import { authenticateUser, getDatabaseClient, getDrizzle } from './_apiUtils.js';
+import { authenticateUser, db} from './_apiUtils.js';
 import { jokes } from '../drizzle/schema.js';
 
 export default async function handler(req, res) {
@@ -7,11 +7,8 @@ export default async function handler(req, res) {
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  let client;
   try {
     const user = await authenticateUser(req);
-    client = await getDatabaseClient();
-    const db = getDrizzle(client);
 
     const { setup, punchline } = req.body;
 
@@ -32,10 +29,6 @@ export default async function handler(req, res) {
       res.status(401).json({ error: 'Authentication failed' });
     } else {
       res.status(500).json({ error: 'Error saving joke' });
-    }
-  } finally {
-    if (client) {
-      await client.end();
     }
   }
 }

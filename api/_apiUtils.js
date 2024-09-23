@@ -1,9 +1,14 @@
 import { createClient } from '@supabase/supabase-js'
-import { drizzle } from "drizzle-orm/node-postgres";
-import pg from 'pg';
-const { Client } = pg;
+
+import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+
+const pool = new Pool({ connectionString: env.NEON_DB_URL });
+const db = drizzle(pool)
 
 const supabase = createClient(process.env.VITE_PUBLIC_SUPABASE_URL, process.env.VITE_PUBLIC_SUPABASE_ANON_KEY)
+
+export { supabase, db };
 
 export async function authenticateUser(req) {
   const authHeader = req.headers.authorization;
@@ -20,17 +25,3 @@ export async function authenticateUser(req) {
 
   return user;
 }
-
-export async function getDatabaseClient() {
-  const client = new Client({
-    connectionString: process.env.COCKROACH_DB_URL,
-  });
-  await client.connect();
-  return client;
-}
-
-export function getDrizzle(client) {
-  return drizzle(client);
-}
-
-export { supabase };

@@ -5,7 +5,7 @@ export default defineConfig({
   schema: "./drizzle/schema.js",
   out: "./drizzle",
   dbCredentials: {
-    url: process.env.COCKROACH_DB_URL,
+    url: process.env.NEON_DB_URL,
   },
   verbose: true
 });
