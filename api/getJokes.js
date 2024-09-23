@@ -1,4 +1,4 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
+import { drizzle } from 'drizzle-orm/vercel-postgres';
 import { Pool } from 'pg';
 import { jokes } from '../drizzle/schema';
 
