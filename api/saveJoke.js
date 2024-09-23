@@ -1,6 +1,4 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import pg from 'pg';
-const { Client } = pg;
+import { authenticateUser, getDatabaseClient, getDrizzle } from './_apiUtils';
 import { jokes } from '../drizzle/schema.js';
 
 export default async function handler(req, res) {
@@ -9,13 +7,11 @@ export default async function handler(req, res) {
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  const client = new Client({
-    connectionString: process.env.COCKROACH_DB_URL,
-  });
-
+  let client;
   try {
-    await client.connect();
-    const db = drizzle(client);
+    const user = await authenticateUser(req);
+    client = await getDatabaseClient();
+    const db = getDrizzle(client);
 
     const { setup, punchline } = req.body;
 
@@ -23,12 +19,23 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Setup and punchline are required' });
     }
 
-    const result = await db.insert(jokes).values({ setup, punchline }).returning();
+    const result = await db.insert(jokes).values({ 
+      setup, 
+      punchline,
+      userId: user.id
+    }).returning();
+
     res.status(201).json(result[0]);
   } catch (error) {
     console.error('Error saving joke:', error);
-    res.status(500).json({ error: 'Error saving joke' });
+    if (error.message.includes('Authorization') || error.message.includes('token')) {
+      res.status(401).json({ error: 'Authentication failed' });
+    } else {
+      res.status(500).json({ error: 'Error saving joke' });
+    }
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }

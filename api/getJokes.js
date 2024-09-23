@@ -1,28 +1,34 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import pg from 'pg';
-const { Client } = pg;
+import { authenticateUser, getDatabaseClient, getDrizzle } from './_apiUtils';
 import { jokes } from '../drizzle/schema.js';
 
 export default async function handler(req, res) {
-  const client = new Client({
-    connectionString: process.env.COCKROACH_DB_URL,
-  });
+  if (req.method !== 'GET') {
+    res.setHeader('Allow', ['GET']);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
 
-  if (req.method === 'GET') {
-    try {
-      await client.connect();
-      const db = drizzle(client);
-      
-      const result = await db.select().from(jokes).limit(10);
-      res.status(200).json(result);
-    } catch (error) {
-      console.error('Error fetching jokes:', error);
+  let client;
+  try {
+    const user = await authenticateUser(req);
+    client = await getDatabaseClient();
+    const db = getDrizzle(client);
+    
+    const result = await db.select()
+      .from(jokes)
+      .where(jokes.userId.eq(user.id))
+      .limit(10);
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error:', error);
+    if (error.message.includes('Authorization') || error.message.includes('token')) {
+      res.status(401).json({ error: 'Authentication failed' });
+    } else {
       res.status(500).json({ error: 'Error fetching jokes' });
-    } finally {
+    }
+  } finally {
+    if (client) {
       await client.end();
     }
-  } else {
-    res.setHeader('Allow', ['GET']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
