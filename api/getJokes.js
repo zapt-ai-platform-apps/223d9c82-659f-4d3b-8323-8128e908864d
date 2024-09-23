@@ -1,7 +1,7 @@
 import { jokes } from '../drizzle/schema.js';
-import { Pool } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
 import { authenticateUser } from "./_apiUtils.js"
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -12,8 +12,8 @@ export default async function handler(req, res) {
   try {
     const user = await authenticateUser(req);
     
-    const pool = new Pool({ connectionString: process.env.NEON_DB_URL });
-    const db = drizzle(pool)
+    const sql = neon(process.env.NEON_DB_URL);
+    const db = drizzle(sql);
 
     const result = await db.select()
       .from(jokes)
