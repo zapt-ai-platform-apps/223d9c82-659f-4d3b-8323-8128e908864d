@@ -29,13 +29,13 @@ function App() {
 
   const fetchJokes = async () => {
     const { data: { session } } = await supabase.auth.getSession()
-
+console.log('hi')
     const response = await fetch('/api/jokes', {
       headers: {
         'Authorization': `Bearer ${session.access_token}`
       }
     });
-
+console.log('bye')
     if (response.ok) {
       const data = await response.json();
 console.log(data)
