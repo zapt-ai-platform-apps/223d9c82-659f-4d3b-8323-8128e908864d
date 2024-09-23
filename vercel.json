@@ -11,7 +11,10 @@
   ],
   "functions": {
     "api/*.js": {
-      "includeFiles": "../drizzle/**"
+      "includeFiles": [
+        "../drizzle/**",
+        "../node_modules/drizzle-orm/**"
+      ]
     }
   }
 }
