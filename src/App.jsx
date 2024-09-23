@@ -3,9 +3,6 @@ import { createEvent, supabase } from './supabaseClient'
 import { Auth } from '@supabase/auth-ui-solid'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 
-// add the other API calling examples in
-// functions not seeing _apiUtils.js file
-
 function App() {
   const [jokes, setJokes] = createSignal([]);
   const [newJoke, setNewJoke] = createSignal({ setup: '', punchline: '' });
@@ -73,7 +70,6 @@ console.log(data)
   };
 
   onMount(() => {
-    // if(!user()) return
     fetchJokes();
   });
 
