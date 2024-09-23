@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   try {
     const user = await authenticateUser(req);
     
-    const pool = new Pool({ connectionString: env.NEON_DB_URL });
+    const pool = new Pool({ connectionString: process.env.NEON_DB_URL });
     const db = drizzle(pool)
 
     const result = await db.select()
