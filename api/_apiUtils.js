@@ -1,14 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 
-import { Pool } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-
-const pool = new Pool({ connectionString: process.env.NEON_DB_URL });
-const db = drizzle(pool)
-
 const supabase = createClient(process.env.VITE_PUBLIC_SUPABASE_URL, process.env.VITE_PUBLIC_SUPABASE_ANON_KEY)
-
-export { supabase, db };
 
 export async function authenticateUser(req) {
   const authHeader = req.headers.authorization;

@@ -1,5 +1,6 @@
-import { authenticateUser, db} from './_apiUtils.js';
 import { jokes } from '../drizzle/schema.js';
+import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -16,11 +17,17 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Setup and punchline are required' });
     }
 
+    const pool = new Pool({ connectionString: env.NEON_DB_URL });
+    const db = drizzle(pool)
+    
     const result = await db.insert(jokes).values({ 
       setup, 
       punchline,
       userId: user.id
     }).returning();
+
+    const [post] = await pool.query('SELECT * FROM posts WHERE id = $1', [postId]);
+
 
     res.status(201).json(result[0]);
   } catch (error) {

@@ -1,5 +1,6 @@
-import { authenticateUser, db } from './_apiUtils.js';
 import { jokes } from '../drizzle/schema.js';
+import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -10,6 +11,9 @@ export default async function handler(req, res) {
   try {
     const user = await authenticateUser(req);
     
+    const pool = new Pool({ connectionString: env.NEON_DB_URL });
+    const db = drizzle(pool)
+
     const result = await db.select()
       .from(jokes)
       .where(jokes.userId.eq(user.id))
