@@ -1,4 +1,4 @@
-import { createSignal, onMount, For } from 'solid-js';
+import { createSignal, onMount, createEffect, For } from 'solid-js';
 import { createEvent, supabase } from './supabaseClient'
 import { Auth } from '@supabase/auth-ui-solid'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
@@ -66,7 +66,7 @@ function App() {
     }
   };
 
-  onMount(() => {
+  createEffect(() => {
     if(!user()) return;
     fetchJokes();
   });
