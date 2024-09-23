@@ -1,6 +1,7 @@
-import { drizzle } from 'drizzle-orm/vercel-postgres';
+// import { drizzle } from 'drizzle-orm/vercel-postgres';
 import { Pool } from 'pg';
 import { jokes } from '../drizzle/schema';
+import { drizzle } from 'drizzle-orm';
 
 const pool = new Pool({
   connectionString: process.env.COCKROACH_DB_URL,
