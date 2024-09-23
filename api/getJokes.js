@@ -1,6 +1,6 @@
-import { jokes } from '../drizzle/schema.js';
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
+import { jokes } from '../drizzle/schema.js';
 
 const client = new Client({
   connectionString: process.env.COCKROACH_DB_URL,
