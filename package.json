@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "VERCEL_FORCE_NO_BUILD_CACHE=1 npm run log-cwd && npm run log-migrations-pre && npm run generate && npm run log-migrations-post && npm run migrate && vite build",
+    "build": "npm run log-cwd && npm run log-migrations-pre && npm run log-migrations-post && vite build",
     "serve": "vite preview",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
