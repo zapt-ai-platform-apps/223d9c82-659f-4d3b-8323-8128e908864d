@@ -11,7 +11,8 @@
   ],
   "functions": {
     "api/*.mjs": {
-      "includeFiles": "../drizzle/**"
+      "includeFiles": "../drizzle/**",
+      "runtime": "nodejs18.x"
     }
   }
 }
