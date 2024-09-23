@@ -8,7 +8,7 @@
     "build": "npm run generate && npm run log-migrations-post && npm run migrate && vite build",
     "serve": "vite preview",
     "generate": "drizzle-kit generate",
-    "migrate": "drizzle-kit migrate",
+    "migrate": "node detailed-migrate.js",
     "log-migrations-post": "echo 'After generate:' && ls -la ./drizzle"
   },
   "dependencies": {
