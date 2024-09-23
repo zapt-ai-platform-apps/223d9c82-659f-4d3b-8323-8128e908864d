@@ -6,5 +6,6 @@ export default defineConfig({
   out: "./drizzle",
   dbCredentials: {
     url: process.env.COCKROACH_DB_URL,
-  }
+  },
+  verbose: true
 });
