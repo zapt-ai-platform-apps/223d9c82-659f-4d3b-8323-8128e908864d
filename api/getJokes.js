@@ -12,11 +12,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const result = await db.select().from(jokes).limit(10);
-      res.status(200).json(result);
-
-      // res.status(200).json({ 
-      //   message: `Hello from Vercel Serverless Function!`
-      // });      
+      res.status(200).json(result);   
     } catch (error) {
       console.error('Error fetching jokes:', error);
       res.status(500).json({ error: 'Error fetching jokes' });
