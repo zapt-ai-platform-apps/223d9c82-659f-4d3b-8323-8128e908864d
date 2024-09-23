@@ -48,6 +48,8 @@ function App() {
   };
 
   const saveJoke = async (e) => {
+    const { data: { session } } = await supabase.auth.getSession()
+
     e.preventDefault();
     try {
       const response = await fetch('/api/saveJoke', {
