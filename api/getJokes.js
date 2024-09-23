@@ -1,6 +1,6 @@
 // import { drizzle } from 'drizzle-orm/vercel-postgres';
-// import { Pool } from 'pg';
-import { jokes } from '../drizzle/schema';
+import { Pool } from 'pg';
+// import { jokes } from '../drizzle/schema';
 // import { drizzle } from 'drizzle-orm';
 
 // const pool = new Pool({
