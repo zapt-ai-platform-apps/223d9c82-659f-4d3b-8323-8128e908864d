@@ -1,6 +1,6 @@
 // import { drizzle } from 'drizzle-orm/vercel-postgres';
 // import { Pool } from 'pg';
-// import { jokes } from '../drizzle/schema';
+import { jokes } from '../drizzle/schema';
 // import { drizzle } from 'drizzle-orm';
 
 // const pool = new Pool({
@@ -16,8 +16,7 @@ export default async function handler(req, res) {
       // res.status(200).json(result);
 
       res.status(200).json({ 
-        message: `Hello from Vercel Serverless Function!`,
-        currentTime: formattedDate
+        message: `Hello from Vercel Serverless Function!`
       });      
     } catch (error) {
       console.error('Error fetching jokes:', error);
