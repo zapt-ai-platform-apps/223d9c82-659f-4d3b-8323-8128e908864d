@@ -5,10 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run generate && npm run migrate && vite build",
+    "build": "npm run log-cwd && npm run log-env && npm run log-migrations-pre && npm run generate && npm run log-migrations-post && npm run migrate && vite build",
     "serve": "vite preview",
     "generate": "drizzle-kit generate",
-    "migrate": "drizzle-kit migrate --verbose"
+    "migrate": "drizzle-kit migrate",
+    "log-cwd": "echo 'Current directory:' && pwd",
+    "log-env": "echo 'Database URL:' && echo $COCKROACH_DB_URL",
+    "log-migrations-pre": "echo 'Before generate:' && ls -la ./drizzle",
+    "log-migrations-post": "echo 'After generate:' && ls -la ./drizzle"
   },
   "dependencies": {
     "solid-js": "^1.8.22",
