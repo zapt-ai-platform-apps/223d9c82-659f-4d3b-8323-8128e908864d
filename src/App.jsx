@@ -41,6 +41,7 @@ function App() {
 
     if (response.ok) {
       const data = await response.json();
+console.log(data)
       setJokes(data);
     } else {
       console.error('Error fetching jokes:', error);

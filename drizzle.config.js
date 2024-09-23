@@ -6,6 +6,5 @@ export default defineConfig({
   out: "./drizzle",
   dbCredentials: {
     url: process.env.NEON_DB_URL,
-  },
-  verbose: true
+  }
 });
