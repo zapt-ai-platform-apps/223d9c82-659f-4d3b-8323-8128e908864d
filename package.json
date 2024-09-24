@@ -14,7 +14,8 @@
     "@neondatabase/serverless": "^0.9.5",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/auth-ui-solid": "^0.3.8",
-    "@supabase/supabase-js": "^2.45.4"
+    "@supabase/supabase-js": "^2.45.4",
+    "solid-markdown": "^2.0.13"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",

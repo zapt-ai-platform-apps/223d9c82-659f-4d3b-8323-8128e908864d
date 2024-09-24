@@ -2,6 +2,7 @@ import { createSignal, onMount, createEffect, For, Show } from 'solid-js';
 import { createEvent, supabase } from './supabaseClient';
 import { Auth } from '@supabase/auth-ui-solid';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
+import SolidMarkdown from 'solid-markdown';
 
 function App() {
   const [jokes, setJokes] = createSignal([]);
@@ -9,6 +10,10 @@ function App() {
   const [user, setUser] = createSignal(null);
   const [currentPage, setCurrentPage] = createSignal('login');
   const [loading, setLoading] = createSignal(false);
+  const [generatedImage, setGeneratedImage] = createSignal('');
+  const [audioUrl, setAudioUrl] = createSignal('');
+  const [markdownText, setMarkdownText] = createSignal('');
+  const [apiResponse, setApiResponse] = createSignal('');
 
   const checkUserSignedIn = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -84,6 +89,64 @@ function App() {
     }
   };
 
+  const handleGenerateImage = async () => {
+    setLoading(true);
+    try {
+      const result = await createEvent('generate_image', {
+        prompt: 'A funny cartoon character telling a joke'
+      });
+      setGeneratedImage(result);
+    } catch (error) {
+      console.error('Error generating image:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTextToSpeech = async () => {
+    setLoading(true);
+    try {
+      const result = await createEvent('text_to_speech', {
+        text: `${newJoke().setup} ... ${newJoke().punchline}`
+      });
+      setAudioUrl(result);
+    } catch (error) {
+      console.error('Error converting text to speech:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMarkdownGeneration = async () => {
+    setLoading(true);
+    try {
+      const result = await createEvent('chatgpt_request', {
+        prompt: 'Write a short, funny story about a comedian in markdown format',
+        response_type: 'text'
+      });
+      setMarkdownText(result);
+    } catch (error) {
+      console.error('Error generating markdown:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleApiCall = async () => {
+    setLoading(true);
+    try {
+      const result = await createEvent('call_api', {
+        api_id: 'ea764266-2a18-41c9-b7b0-dac80fed3797',
+        instructions: 'Get the current weather for New York City'
+      });
+      setApiResponse(JSON.stringify(result, null, 2));
+    } catch (error) {
+      console.error('Error calling API:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div class="min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 p-4">
       <Show
@@ -110,7 +173,7 @@ function App() {
           </div>
         }
       >
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-6xl mx-auto">
           <div class="flex justify-between items-center mb-8">
             <h1 class="text-4xl font-bold text-purple-600">Joke Central</h1>
             <button
@@ -121,8 +184,8 @@ function App() {
             </button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-1 md:col-span-2 lg:col-span-1">
               <h2 class="text-2xl font-bold mb-4 text-purple-600">Add New Joke</h2>
               <form onSubmit={saveJoke} class="space-y-4">
                 <input
@@ -161,7 +224,7 @@ function App() {
               </form>
             </div>
 
-            <div>
+            <div class="col-span-1 md:col-span-2 lg:col-span-1">
               <h2 class="text-2xl font-bold mb-4 text-purple-600">Joke List</h2>
               <div class="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto pr-4">
                 <For each={jokes()}>
@@ -174,6 +237,71 @@ function App() {
                 </For>
               </div>
             </div>
+
+            <div class="col-span-1 md:col-span-2 lg:col-span-1">
+              <h2 class="text-2xl font-bold mb-4 text-purple-600">Additional Features</h2>
+              <div class="space-y-4">
+                <button
+                  onClick={handleGenerateImage}
+                  class="w-full px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105"
+                  disabled={loading()}
+                >
+                  Generate Image
+                </button>
+                <button
+                  onClick={handleTextToSpeech}
+                  class="w-full px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 ease-in-out transform hover:scale-105"
+                  disabled={loading()}
+                >
+                  Text to Speech
+                </button>
+                <button
+                  onClick={handleMarkdownGeneration}
+                  class="w-full px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition duration-300 ease-in-out transform hover:scale-105"
+                  disabled={loading()}
+                >
+                  Generate Markdown
+                </button>
+                <button
+                  onClick={handleApiCall}
+                  class="w-full px-6 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition duration-300 ease-in-out transform hover:scale-105"
+                  disabled={loading()}
+                >
+                  Call API
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Show when={generatedImage()}>
+              <div>
+                <h3 class="text-xl font-bold mb-2 text-purple-600">Generated Image</h3>
+                <img src={generatedImage()} alt="Generated joke image" class="w-full rounded-lg shadow-md" />
+              </div>
+            </Show>
+            <Show when={audioUrl()}>
+              <div>
+                <h3 class="text-xl font-bold mb-2 text-purple-600">Audio Joke</h3>
+                <audio controls src={audioUrl()} class="w-full" />
+              </div>
+            </Show>
+            <Show when={markdownText()}>
+              <div>
+                <h3 class="text-xl font-bold mb-2 text-purple-600">Markdown Story</h3>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                  <SolidMarkdown children={markdownText()} />
+                </div>
+              </div>
+            </Show>
+            <Show when={apiResponse()}>
+              <div>
+                <h3 class="text-xl font-bold mb-2 text-purple-600">API Response</h3>
+                <pre class="bg-white p-4 rounded-lg shadow-md overflow-x-auto">
+                  <code>{apiResponse()}</code>
+                </pre>
+              </div>
+            </Show>
           </div>
         </div>
       </Show>
