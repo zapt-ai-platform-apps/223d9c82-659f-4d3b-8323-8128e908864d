@@ -2,7 +2,7 @@ import { createSignal, onMount, createEffect, For, Show } from 'solid-js';
 import { createEvent, supabase } from './supabaseClient';
 import { Auth } from '@supabase/auth-ui-solid';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-import SolidMarkdown from 'solid-markdown';
+import { SolidMarkdown } from "solid-markdown";
 
 function App() {
   const [jokes, setJokes] = createSignal([]);
