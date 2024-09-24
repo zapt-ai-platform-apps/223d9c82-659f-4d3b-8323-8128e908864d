@@ -248,13 +248,15 @@ function App() {
                 >
                   Generate Image
                 </button>
-                <button
-                  onClick={handleTextToSpeech}
-                  class="w-full px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 ease-in-out transform hover:scale-105"
-                  disabled={loading()}
-                >
-                  Text to Speech
-                </button>
+                <Show when={newJoke().setup && newJoke().punchline}>
+                  <button
+                    onClick={handleTextToSpeech}
+                    class="w-full px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 ease-in-out transform hover:scale-105"
+                    disabled={loading()}
+                  >
+                    Text to Speech
+                  </button>
+                </Show>
                 <button
                   onClick={handleMarkdownGeneration}
                   class="w-full px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition duration-300 ease-in-out transform hover:scale-105"
