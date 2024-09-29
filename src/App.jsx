@@ -25,6 +25,22 @@ function App() {
 
   onMount(checkUserSignedIn);
 
+  createEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((_, session) => {
+      if (session?.user) {
+        setUser(session.user);
+        setCurrentPage('homePage');
+      } else {
+        setUser(null);
+        setCurrentPage('login');
+      }
+    });
+
+    return () => {
+      authListener?.unsubscribe();
+    };
+  });
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
@@ -32,6 +48,7 @@ function App() {
   };
 
   const fetchJokes = async () => {
+    setLoading(true);
     const { data: { session } } = await supabase.auth.getSession();
     const response = await fetch('/api/getJokes', {
       headers: {
@@ -44,10 +61,12 @@ function App() {
     } else {
       console.error('Error fetching jokes:', response.statusText);
     }
+    setLoading(false);
   };
 
   const saveJoke = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const { data: { session } } = await supabase.auth.getSession();
     try {
       const response = await fetch('/api/saveJoke', {
@@ -67,6 +86,7 @@ function App() {
     } catch (error) {
       console.error('Error saving joke:', error);
     }
+    setLoading(false);
   };
 
   createEffect(() => {
@@ -173,11 +193,11 @@ function App() {
           </div>
         }
       >
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-6xl mx-auto h-full">
           <div class="flex justify-between items-center mb-8">
             <h1 class="text-4xl font-bold text-purple-600">Joke Central</h1>
             <button
-              class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-300 ease-in-out transform hover:scale-105"
+              class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
               onClick={handleSignOut}
             >
               Sign Out
@@ -193,7 +213,7 @@ function App() {
                   placeholder="Setup"
                   value={newJoke().setup}
                   onInput={(e) => setNewJoke({ ...newJoke(), setup: e.target.value })}
-                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent box-border"
                   required
                 />
                 <input
@@ -201,24 +221,26 @@ function App() {
                   placeholder="Punchline"
                   value={newJoke().punchline}
                   onInput={(e) => setNewJoke({ ...newJoke(), punchline: e.target.value })}
-                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent box-border"
                   required
                 />
                 <div class="flex space-x-4">
                   <button
                     type="submit"
-                    class="flex-1 px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition duration-300 ease-in-out transform hover:scale-105"
+                    class={`flex-1 px-6 py-3 bg-purple-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-purple-600'}`}
+                    disabled={loading()}
                   >
                     Save Joke
                   </button>
                   <button
                     type="button"
-                    class={`flex-1 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105 ${loading() ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    class={`flex-1 px-6 py-3 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'}`}
                     onClick={handleGenerateJoke}
                     disabled={loading()}
                   >
-                    <Show when={loading()}>Generating...</Show>
-                    <Show when={!loading()}>Generate Joke</Show>
+                    <Show when={loading()} fallback="Generate Joke">
+                      Generating...
+                    </Show>
                   </button>
                 </div>
               </form>
@@ -243,33 +265,41 @@ function App() {
               <div class="space-y-4">
                 <button
                   onClick={handleGenerateImage}
-                  class="w-full px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105"
+                  class={`w-full px-6 py-3 bg-green-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'}`}
                   disabled={loading()}
                 >
-                  Generate Image
+                  <Show when={loading() && generatedImage() === ''} fallback="Generate Image">
+                    Loading...
+                  </Show>
                 </button>
                 <Show when={newJoke().setup && newJoke().punchline}>
                   <button
                     onClick={handleTextToSpeech}
-                    class="w-full px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 ease-in-out transform hover:scale-105"
+                    class={`w-full px-6 py-3 bg-yellow-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-600'}`}
                     disabled={loading()}
                   >
-                    Text to Speech
+                    <Show when={loading() && audioUrl() === ''} fallback="Text to Speech">
+                      Loading...
+                    </Show>
                   </button>
                 </Show>
                 <button
                   onClick={handleMarkdownGeneration}
-                  class="w-full px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition duration-300 ease-in-out transform hover:scale-105"
+                  class={`w-full px-6 py-3 bg-indigo-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-600'}`}
                   disabled={loading()}
                 >
-                  Generate Markdown
+                  <Show when={loading() && markdownText() === ''} fallback="Generate Markdown">
+                    Loading...
+                  </Show>
                 </button>
                 <button
                   onClick={handleApiCall}
-                  class="w-full px-6 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition duration-300 ease-in-out transform hover:scale-105"
+                  class={`w-full px-6 py-3 bg-pink-500 text-white rounded-lg transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-pink-600'}`}
                   disabled={loading()}
                 >
-                  Call API
+                  <Show when={loading() && apiResponse() === ''} fallback="Call API">
+                    Loading...
+                  </Show>
                 </button>
               </div>
             </div>
